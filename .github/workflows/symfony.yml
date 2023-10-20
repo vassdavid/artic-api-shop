@@ -27,16 +27,17 @@ jobs:
         tools: cs2pr, phpcs
     - uses: actions/checkout@v3
     - name: Copy .env.test.local
-      run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+      run: php -r "file_exists('src/.env.test.local') || copy('src/.env.test', 'src/.env.test.local');"
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v3
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        path: src/vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('src/**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
     - name: Install Dependencies
+      working-directory: src
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Create Database
       run: |
@@ -45,4 +46,4 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: vendor/bin/phpunit
+      run: src/vendor/bin/phpunit
