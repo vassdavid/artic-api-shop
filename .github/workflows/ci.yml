@@ -43,7 +43,13 @@ jobs:
       run: |
         mkdir -p data
         touch data/database.sqlite
+    - name: Execute phpstan
+      run: src/vendor/bin/phpstan
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: src/vendor/bin/phpunit
+      run: src/vendor/bin/phpunit --coverage-clover coverage.xml .
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
