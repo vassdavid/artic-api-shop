@@ -48,8 +48,11 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: src/vendor/bin/phpunit --coverage-clover coverage.xml .
+      run: src/bin/phpunit --coverage-clover coverage.xml .
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
+      with:
+        verbose: true
+        files: ./coverage.xml
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
