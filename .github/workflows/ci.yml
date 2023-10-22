@@ -48,7 +48,7 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: src/bin/phpunit --coverage-clover coverage.xml .
+      run: src/bin/phpunit -c src/phpunit.xml.dist --coverage-clover coverage.xml .
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:
