@@ -5,9 +5,12 @@ use App\Dto\Artwork;
 use App\Request\ListArtworkRequest;
 use App\Request\ShowArtworkRequest;
 use App\Interfaces\ArticApiServiceInterface;
+use App\Service\ArticApiService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+#[CoversClass(ArticApiService::class)]
 class ArticApiServiceTest extends KernelTestCase
 {
     private function getService(): ArticApiServiceInterface
