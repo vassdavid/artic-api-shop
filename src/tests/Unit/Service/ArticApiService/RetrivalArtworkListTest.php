@@ -5,6 +5,7 @@ use App\Dto\Artwork;
 use PHPUnit\Framework\TestCase;
 use App\Service\ArticApiService;
 use App\Request\ListArtworkRequest;
+use App\Response\Artic\ArticListResponse;
 use App\Interfaces\ArticApiServiceInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use App\Exception\InvalidApiResponseException;
@@ -46,21 +47,21 @@ class RetrivalArtworkListTest extends TestCase
         $request = new ListArtworkRequest();
         $result = $service->retrivalArtworkList($request);
 
-        $this->assertIsArray($result);
-        $this->assertCount(12, $result);
-        $this->assertInstanceOf(Artwork::class, $result[0]);
+        $this->assertInstanceOf(ArticListResponse::class, $result);
+        $this->assertCount(12, $result->data);
+        $this->assertInstanceOf(Artwork::class, $result->data[0]);
     }
 
     public function testNullRetrivalArtWorkList(): void
     {
         $service = new ArticApiService(
-            $this->createMockHttpClient('{"data":[]}'),
+            $this->createMockHttpClient('{"pagination":{"total":123203,"limit":12,"offset":0,"total_pages":10267,"current_page":1},"data":[]}'),
         );
         $request = new ListArtworkRequest();
         $result = $service->retrivalArtworkList($request);
-        
-        $this->assertIsArray($result);
-        $this->assertCount(0, $result);
+
+        $this->assertInstanceOf(ArticListResponse::class, $result);
+        $this->assertCount(0, $result->data);
     }
 
     public function testInvalidStatusRetrivalArtWorkList(): void

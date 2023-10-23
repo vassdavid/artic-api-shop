@@ -5,6 +5,7 @@ use App\Dto\Artwork;
 use App\Request\ListArtworkRequest;
 use App\Request\ShowArtworkRequest;
 use App\Interfaces\ArticApiServiceInterface;
+use App\Response\Artic\ArticListResponse;
 use App\Service\ArticApiService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -32,9 +33,9 @@ class ArticApiServiceTest extends KernelTestCase
         $service = $this->getService();
         $request = new ListArtworkRequest();
         $result = $service->retrivalArtworkList($request);
-        $this->assertIsArray($result);
-        $this->assertTrue(count($result) > 0);
-        $this->assertInstanceOf(Artwork::class, $result[0]);
+        $this->assertInstanceOf(ArticListResponse::class, $result);
+        $this->assertTrue(count($result->data) > 0);
+        $this->assertInstanceOf(Artwork::class, $result->data[0]);
     }
 
     public function testInvalidIdShowArtwork(): void

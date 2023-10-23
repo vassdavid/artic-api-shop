@@ -8,6 +8,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 use App\Interfaces\ArtworkServiceInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use App\Interfaces\ArticApiServiceInterface;
+use App\Response\Artic\ArticListResponse;
 
 class ArtworkService implements ArtworkServiceInterface
 {
@@ -51,13 +52,13 @@ class ArtworkService implements ArtworkServiceInterface
      * Get Artwork List cache or load List
      *
      * @param ListArtworkRequest $request
-     * @return Artwork[]
+     * @return ArticListResponse
      */
-    private function getListCache(ListArtworkRequest $request): array
+    private function getListCache(ListArtworkRequest $request): ArticListResponse
     {
         return $this->cache->get(
             $this->buildListCacheKey($request),
-            function(ItemInterface $item) use ($request): array
+            function(ItemInterface $item) use ($request): ArticListResponse
             {
                 $item->expiresAfter(self::CACHE_EXPIRES);
 
@@ -76,9 +77,9 @@ class ArtworkService implements ArtworkServiceInterface
      * List array of artwork based in request
      *
      * @param ListArtworkRequest $request
-     * @return Artwork[]
+     * @return ArticListResponse
      */
-    public function listArtwork(ListArtworkRequest $request): array
+    public function listArtwork(ListArtworkRequest $request): ArticListResponse
     {
         return $this->getListCache($request);
     }

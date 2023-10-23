@@ -4,6 +4,7 @@ namespace App\Service;
 use App\Dto\Artwork;
 use App\Request\ListArtworkRequest;
 use App\Request\ShowArtworkRequest;
+use App\Response\Artic\ArticListResponse;
 use App\Interfaces\ArticApiServiceInterface;
 use App\Exception\InvalidApiResponseException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -26,10 +27,19 @@ class ArticApiService implements ArticApiServiceInterface
         'artist_title',
         'thumbnail'
     ];
-    private const REQUIRED_FIELD_LIST = [
+    private const SINGLE_REQUIRED_FIELD = [
         'id',
         'title',
         'artist_title',
+    ];
+
+    private const PAGINATION_REQUIRED_FIELD = [
+        'total',
+        'total',
+        'limit',
+        'offset',
+        'total_pages',
+        'current_page',
     ];
 
     public function __construct(
@@ -58,7 +68,27 @@ class ArticApiService implements ArticApiServiceInterface
     }
 
     /**
-     * Check required field is setted
+     * Get non existent array keys if exist 
+     *
+     * @param array<string,mixed> $array
+     * @param string[] $keyList
+     * @return string[]
+     */
+    private function getMissigArrayKeys(array $array, array $keyList): array
+    {
+        $missingFields = [];
+        foreach($keyList as $fieldName) {
+            if(!array_key_exists($fieldName, $array)) {
+                $missingFields[] = $fieldName;
+            }
+        }
+
+        return $missingFields;
+    }
+
+
+    /**
+     * Check required Artwork field is setted
      * 
      * @param array<string,mixed> $artwork
      * @throws InvalidApiResponseException
@@ -66,15 +96,26 @@ class ArticApiService implements ArticApiServiceInterface
      */
     private function checkRequiredArtworkFields(array $artwork): void
     {
-        $missingFields = [];
-        foreach(self::REQUIRED_FIELD_LIST as $fieldName) {
-            if(!array_key_exists($fieldName, $artwork)) {
-                $missingFields[] = $fieldName;
-            }
-        }
+        $missingFields = $this->getMissigArrayKeys($artwork, self::SINGLE_REQUIRED_FIELD);
 
         if(count($missingFields) > 0) {
-            throw new InvalidApiResponseException();
+            throw new InvalidApiResponseException("Missing Artwork response fields: (" . join(',',$missingFields) . ")");
+        }
+    }
+
+    /**
+     * Check required List field is setted
+     * 
+     * @param array<string,mixed> $list
+     * @throws InvalidApiResponseException
+     * @return void
+     */
+    private function checkRequiredPaginationFields(array $list): void
+    {
+        $missingFields = $this->getMissigArrayKeys($list, self::PAGINATION_REQUIRED_FIELD);
+
+        if(count($missingFields) > 0) {
+            throw new InvalidApiResponseException("Missing Pagination response fields: (" . join(',',$missingFields) . ")");
         }
     }
 
@@ -83,6 +124,15 @@ class ArticApiService implements ArticApiServiceInterface
         return 'fields=' . implode(',', self::FIELD_LIST);
     }
 
+    /**
+     * Retrival single artwork
+     *
+     * @param ShowArtworkRequest $request
+     * @throws InvalidApiResponseException
+     * @throws NotFoundHttpException
+     * @throws HttpException
+     * @return Artwork
+     */
     public function retrievalArtwork(ShowArtworkRequest $request): Artwork
     {
         $response  = $this->httpClient->request(
@@ -100,7 +150,7 @@ class ArticApiService implements ArticApiServiceInterface
         //check response format
         if( !isset($content['data'])  ) {
             //@todo log error
-            throw new InvalidApiResponseException();
+            throw new InvalidApiResponseException('Missing "data" field.');
         }
         $this->checkRequiredArtworkFields($content['data']);
 
@@ -114,9 +164,12 @@ class ArticApiService implements ArticApiServiceInterface
      * List array of artwork based in request
      *
      * @param ListArtworkRequest $request
-     * @return Artwork[]
+     * @throws InvalidApiResponseException
+     * @throws NotFoundHttpException
+     * @throws HttpException
+     * @return ArticListResponse
      */
-    public function retrivalArtworkList(ListArtworkRequest $request): array
+    public function retrivalArtworkList(ListArtworkRequest $request): ArticListResponse
     {
         $response = $this->httpClient->request(
             'GET',
@@ -131,18 +184,36 @@ class ArticApiService implements ArticApiServiceInterface
 
         $content = $response->toArray();
 
-        if( !isset( $content['data'] ) ) {
+        //validate response format
+        if( !isset($content['data'])  ) {
             //@todo log error
-            throw new InvalidApiResponseException();
+            throw new InvalidApiResponseException('Missing "data" field in a Response.');
         }
+        //validate response format
+        if( !isset($content['pagination'])  ) {
+            //@todo log error
+            throw new InvalidApiResponseException('Missing "pagination" field in a Response.');
+        }
+
+
+        $this->checkRequiredPaginationFields($content['pagination']);
         
         $list = [];
-        //Process array
+        //Process response
         foreach( $content['data'] as $item ) {
             $this->checkRequiredArtworkFields( $item );
             $list[] = Artwork::createByArray( $item );
         }
 
-        return $list;
+        //build response object
+        $listResponse = new ArticListResponse();
+        $listResponse->total = $content['pagination']['total'];
+        $listResponse->limit = $content['pagination']['limit'];
+        $listResponse->offset = $content['pagination']['offset'];
+        $listResponse->totalPages = $content['pagination']['total_pages'];
+        $listResponse->currentPage = $content['pagination']['current_page'];
+        $listResponse->data = $list;
+        
+        return $listResponse;
     }
 }

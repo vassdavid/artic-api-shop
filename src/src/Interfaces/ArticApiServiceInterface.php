@@ -4,6 +4,7 @@ namespace App\Interfaces;
 use App\Dto\Artwork;
 use App\Request\ListArtworkRequest;
 use App\Request\ShowArtworkRequest;
+use App\Response\Artic\ArticListResponse;
 
 interface ArticApiServiceInterface
 {
@@ -13,7 +14,7 @@ interface ArticApiServiceInterface
      * List array of artwork based in request
      *
      * @param ListArtworkRequest $request
-     * @return Artwork[]
+     * @return ArticListResponse
      */
-    public function retrivalArtworkList(ListArtworkRequest $request): array;
+    public function retrivalArtworkList(ListArtworkRequest $request): ArticListResponse;
 }
