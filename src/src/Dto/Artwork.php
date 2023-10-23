@@ -19,9 +19,10 @@ class Artwork
     public static function createByArray(array $item): Artwork
     {
         $artwork = new Artwork();
-        $artwork->id = $item['id'] ?? null;
-        $artwork->title = $item['title'] ?? null;
-       
+        $artwork->id = $item['id'];
+        $artwork->title = $item['title'];
+        $artwork->artistTitle = $item['artist_title'];
+
         if(isset($item['thumbnail'])) {
             $artwork->thumbnail = Thumbnail::createByArray($item['thumbnail']);
         }
