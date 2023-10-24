@@ -1,8 +1,3 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
@@ -19,13 +14,19 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    
-    app.cache.adapter.redis:
-        parent: 'cache.adapter.redis'
-        tags:
-            - { name: 'cache.pool', namespace: 'artic-api-cache' }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Interfaces\ArticApiServiceInterface: '@App\Service\ArticApiService'
-    App\Interfaces\ArtworkServiceInterface: '@App\Service\ArtworkService'
+
+    App\Service\ArtworkService:
+        public: true
+    App\Interfaces\ArtworkServiceInterface: 
+        alias: App\Service\ArtworkService
+        public: true
+    
+    App\Service\ArticApiService:
+        public: true
+    App\Interfaces\ArticApiServiceInterface:
+        alias: App\Service\ArticApiService
+        public: true
 
