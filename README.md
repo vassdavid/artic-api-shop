@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/vassdavid/artic-api-shop/graph/badge.svg?token=ONWV5KLS96)](https://codecov.io/gh/vassdavid/artic-api-shop)
 # artic-api-shop
 
 Artic api used simple shop
