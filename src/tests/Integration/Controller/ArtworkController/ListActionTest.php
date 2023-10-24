@@ -4,11 +4,9 @@ namespace App\Tests\Integration\Controller;
 
 use App\Controller\ArtworkController;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 #[CoversClass(ArtworkController::class)]
-#[CoversFunction("listAction")]
 class ListActionTest extends WebTestCase
 {
     public function testListAction(): void

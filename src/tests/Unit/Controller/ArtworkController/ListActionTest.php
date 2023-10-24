@@ -7,12 +7,10 @@ use App\Request\ListArtworkRequest;
 use App\Controller\ArtworkController;
 use App\Interfaces\ArtworkServiceInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[CoversClass(ArtworkController::class)]
-#[CoversFunction("listAction")]
 class ListActionTest extends TestCase
 {
     public function testSuccessListAction(): void

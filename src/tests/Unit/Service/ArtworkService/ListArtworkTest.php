@@ -5,21 +5,17 @@ use App\Dto\Artwork;
 use App\Service\ArtworkService;
 use PHPUnit\Framework\TestCase;
 use App\Service\ArticApiService;
+use App\Request\ListArtworkRequest;
 use App\Response\Artic\ArticListResponse;
 use App\Interfaces\ArtworkServiceInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use App\Interfaces\ArticApiServiceInterface;
-use App\Request\ListArtworkRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(ArtworkService::class)]
-#[CoversFunction("listArtwork")]
 class ListArtworkTest extends TestCase
 {
-
-
     private function getExampleArtwork(): Artwork
     {
         $artwork = new Artwork();

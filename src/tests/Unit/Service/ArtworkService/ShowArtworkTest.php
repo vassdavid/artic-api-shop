@@ -2,19 +2,19 @@
 namespace App\Tests\Unit\Service\ArtworkService;
 
 use App\Dto\Artwork;
-use App\Interfaces\ArtworkServiceInterface;
 use App\Service\ArtworkService;
 use PHPUnit\Framework\TestCase;
 use App\Service\ArticApiService;
+use App\Request\ShowArtworkRequest;
+use App\Interfaces\ArtworkServiceInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use App\Interfaces\ArticApiServiceInterface;
-use App\Request\ShowArtworkRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(ArtworkService::class)]
-#[CoversFunction("showArtwork")]
+#[UsesClass(Artwork::class)]
 class ShowArtworkTest extends TestCase
 {
 

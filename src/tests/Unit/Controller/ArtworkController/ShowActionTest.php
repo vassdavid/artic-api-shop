@@ -7,12 +7,10 @@ use App\Request\ShowArtworkRequest;
 use App\Controller\ArtworkController;
 use App\Interfaces\ArtworkServiceInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[CoversClass(ArtworkController::class)]
-#[CoversFunction("showAction")]
 class ShowActionTest extends TestCase
 {
     public function testSuccessShowAction(): void
