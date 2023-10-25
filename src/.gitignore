@@ -10,7 +10,8 @@
 ###< symfony/framework-bundle ###
 
 ###> phpstan/phpstan ###
-phpstan.neon
+# disabled because also need for testing
+#phpstan.neon
 ###< phpstan/phpstan ###
 
 ###> symfony/phpunit-bridge ###
@@ -22,3 +23,7 @@ phpstan.neon
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
