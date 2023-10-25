@@ -28,4 +28,5 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Interfaces\ArticApiServiceInterface: '@App\Service\ArticApiService'
     App\Interfaces\ArtworkServiceInterface: '@App\Service\ArtworkService'
+    App\Interfaces\PurchasedArtworkServiceInterface: '@App\Service\PurchasedArtworkService'
 
