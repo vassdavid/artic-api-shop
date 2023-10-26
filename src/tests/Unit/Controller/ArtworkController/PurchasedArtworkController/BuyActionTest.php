@@ -20,6 +20,8 @@ class BuyActionTest extends WebTestCase
     private function createMockUser(): User
     {
         $user = $this->createMock(User::class);
+        $user->set('id', 333);
+        $user->set('email','test@tester.hu');
         $user->method('getId')->willReturn(333);
         $user->method('getEmail')->willReturn('test@tester.hu');
         $user->method('getRoles')->willReturn(['ROLE_USER']);
