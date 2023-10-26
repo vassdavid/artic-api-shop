@@ -1,16 +1,17 @@
 <?php
 namespace App\Tests\Unit\Controller\ArtworkController\PurchasedArtworkController;
 
-use App\Controller\PurchasedArtworkController;
 use App\Entity\User;
+use ReflectionClass;
 use App\Entity\PurchasedArtwork;
 use App\Request\BuyArtworkRequest;
 use App\Exception\AlreadyBuyedException;
 use App\Service\PurchasedArtworkService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
+use App\Controller\PurchasedArtworkController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Interfaces\PurchasedArtworkServiceInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -20,8 +21,13 @@ class BuyActionTest extends WebTestCase
     private function createMockUser(): User
     {
         $user = $this->createMock(User::class);
-        $user->set('id', 333);
-        $user->set('email','test@tester.hu');
+        
+        $a = new User();
+        $reflection = new ReflectionClass($a);
+        $reflectionProperty = $reflection->getProperty('id');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($a, 333);
+        
         $user->method('getId')->willReturn(333);
         $user->method('getEmail')->willReturn('test@tester.hu');
         $user->method('getRoles')->willReturn(['ROLE_USER']);
