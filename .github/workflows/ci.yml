@@ -42,7 +42,7 @@ jobs:
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Create Database
       run: |
-        mkdir -p data
+        mkdir -p src/data
         touch src/data/database.sqlite
     - name: Execute phpstan
       run: src/vendor/bin/phpstan analyse -c src/phpstan.neon
