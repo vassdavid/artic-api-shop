@@ -1,6 +1,3 @@
-when@prod:
-    framework:
-        http_cache: true
 when@dev:
     _errors:
         resource: '@FrameworkBundle/Resources/config/routing/errors.xml'

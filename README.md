@@ -26,4 +26,6 @@ MYSQL_DATABASE=symfony_db_dev
 APP_ENV=dev
 APP_DEBUG=1
 NGINX_BACKEND_DOMAIN=artworkshop.dev
+MYSQL_USER=app_user
+MYSQL_PASSWORD=userpw
 ```
