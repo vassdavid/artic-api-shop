@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
@@ -18,7 +19,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?int $id = null;
 
     #[Assert\NotNull]
-    #[Assert\Email]
+    //#[Assert\Email(mode: Email::VALIDATION_MODE_HTML5_ALLOW_NO_TLD)] (deprecation notice: Since symfony/validator 6.2: The "loose" mode is deprecated. [bug])
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/',
+        message: 'This value is not a valid email address.',
+        match: true,
+    )]
     #[ORM\Column(type: Types::STRING, length:255, nullable: false, unique: true)]
     private ?string $email;
 
@@ -46,7 +52,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
      */
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return [ 'ROLE_USER' ];
     }
 
     /**
