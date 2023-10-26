@@ -1,4 +1,4 @@
 [submodule "docker-compose"]
-	path = docker-compose
+	path = .docker
 	url = https://github.com/vassdavid/docker-compose-symfony-mysql
 	branch = development
