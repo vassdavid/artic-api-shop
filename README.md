@@ -12,9 +12,22 @@ The poject is a simple webshop based on [artic api](https://api.artic.edu/docs/)
 
 ### With docker compose
 
-1) Clone repository.
+1) Clone repository: ``` git clone https://github.com/vassdavid/artic-api-shop.git ```
 
-2) Run ```docker compose -f ./.docker/docker-compose.yml up```.
+2) Open folder: ``` cd  artic-api-shop ```
+
+3) Get docker submodule: ``` git submodule init; git submodule update --remote ```
+
+2) Run ``` docker compose -f ./.docker/docker-compose.yml --env-file .env up -d ```.
+
+### Symfony container
+
+Command to enter symfony container: ``` docker exec -it artic-api-shop-symfony  /bin/sh  ```
+
+### Switch of containers
+
+``` docker compose -f ./.docker/docker-compose.yml down ```
+
 
 #### Example docker-compose settings:
 
