@@ -8,14 +8,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(PurchasedArtwork::class)]
 class PurchasedArtworkGetTest extends TestCase
 {
-    public function testGetId()
+    public function testGetId(): void
     {
         $purchasedArtwork = new PurchasedArtwork();
 
         $this->assertNull($purchasedArtwork->getId());
     }
 
-    public function testGetUser()
+    public function testGetUser(): void
     {
         $purchasedArtwork = new PurchasedArtwork();
         $this->assertNull($purchasedArtwork->getUser());
@@ -25,7 +25,7 @@ class PurchasedArtworkGetTest extends TestCase
         $this->assertSame($user, $purchasedArtwork->getUser());
     }
 
-    public function testGetArtworkId()
+    public function testGetArtworkId(): void
     {
         $purchasedArtwork = new PurchasedArtwork();
         $this->assertNull($purchasedArtwork->getArtworkId());

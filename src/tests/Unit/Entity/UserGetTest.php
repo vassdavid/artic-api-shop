@@ -1,8 +1,9 @@
 <?php
 namespace App\Tests\Unit\Entity;
 
-use PHPUnit\Framework\TestCase;
 use App\Entity\User;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(User::class)]
 class UserGetTest extends TestCase

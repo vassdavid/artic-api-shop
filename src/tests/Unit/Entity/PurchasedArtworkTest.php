@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Validation;
 
 #[CoversClass(PurchasedArtwork::class)]
 class PurchasedArtworkTest extends TestCase
-{
-    public function testValidPurchasedArtworkEntity()
+{ 
+    public function testValidPurchasedArtworkEntity(): void
     {
         $user = new User();
 
@@ -24,7 +24,7 @@ class PurchasedArtworkTest extends TestCase
         $this->assertCount(0, $violations);
     }
 
-    public function testBlankUser()
+    public function testBlankUser(): void
     {
         $purchasedArtwork = new PurchasedArtwork();
         $purchasedArtwork->setArtworkId(123);
@@ -37,7 +37,7 @@ class PurchasedArtworkTest extends TestCase
         $this->assertEquals('This value should not be blank.', $violations[0]->getMessage());
     }
 
-    public function testBlankArtworkId()
+    public function testBlankArtworkId(): void
     {
         $user = new User();
 
