@@ -29,4 +29,7 @@ services:
     App\Interfaces\ArticApiServiceInterface:
         alias: App\Service\ArticApiService
         public: true
+    App\Interfaces\PurchasedArtworkServiceInterface:
+        alias: App\Service\PurchasedArtworkService
+        public: true
 
