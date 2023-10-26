@@ -17,10 +17,19 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 #[CoversClass(PurchasedArtworkController::class)]
 class BuyActionTest extends WebTestCase
 {
+    private function createMockUser(): User
+    {
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(333);
+        $user->method('getEmail')->willReturn('test@tester.hu');
+        $user->method('getRoles')->willReturn(['ROLE_USER']);
+
+        return $user;
+    }
     public function testBuyArtworkActionWithValidRequest(): void
     {
         $client = static::createClient();
-        $user = new User();
+        $user = $this->createMockUser();
         $client->loginUser($user);
 
         $container = static::getContainer();
@@ -47,7 +56,7 @@ class BuyActionTest extends WebTestCase
     public function testBuyArtworkActionWithInvalidRequest(): void
     {
         $client = static::createClient();
-        $user = new User();
+        $user = $this->createMockUser();
         $client->loginUser($user);
 
         $container = static::getContainer();
@@ -80,7 +89,7 @@ class BuyActionTest extends WebTestCase
     public function testBuyArtworkActionWithAlreadyPurchasedArtwork(): void
     {
         $client = static::createClient();
-        $user = new User();
+        $user = $this->createMockUser();
         $client->loginUser($user);
 
         $service = $this->createMock(PurchasedArtworkServiceInterface::class);
