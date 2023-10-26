@@ -11,9 +11,8 @@ use App\Interfaces\PurchasedArtworkServiceInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use ApiPlatform\Symfony\Security\Exception\AccessDeniedException;
+use App\Transform\ConstraintViolationListTransform;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[Route('api/artwork', name: 'api.artwork')]
 class PurchasedArtworkController extends AbstractController
@@ -35,15 +34,17 @@ class PurchasedArtworkController extends AbstractController
         try {
             $result = $service->buyArtwork($request, $user);
         } catch(AlreadyBuyedException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+            return new JsonResponse($e->getMessage(), 400);
         }
 
         if($result instanceof PurchasedArtwork) {
             return new JsonResponse($result);
         }
 
+        $message = ConstraintViolationListTransform::transfromArray($result);
+
         return new JsonResponse(
-            $result,
+            $message,
             400,
         );
     }

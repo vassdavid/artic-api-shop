@@ -19,7 +19,6 @@ class ListActionTest extends TestCase
         $request = $this->createMock(ListArtworkRequest::class);
         $service = $this->createMock(ArtworkServiceInterface::class);
 
-        // Set up expectations for the service mock
 
         // Create an instance of ArtworkController
         $controller = new ArtworkController();
@@ -29,7 +28,6 @@ class ListActionTest extends TestCase
 
         // Perform assertions based on the expected behavior and results
         $this->assertInstanceOf(JsonResponse::class, $response);
-        // Add more assertions as needed
     }
 
     public function testNotFoundListAction(): void
