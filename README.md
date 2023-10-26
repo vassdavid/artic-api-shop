@@ -18,11 +18,22 @@ The poject is a simple webshop based on [artic api](https://api.artic.edu/docs/)
 
 3) Get docker submodule: ``` git submodule init; git submodule update --remote ```
 
-2) Run ``` docker compose -f ./.docker/docker-compose.yml --env-file .env up -d ```.
+4) Run ``` docker compose -f ./.docker/docker-compose.yml --env-file .env up -d ```.
 
-### Symfony container
+5) Command to enter symfony container: ``` docker exec -it artic-api-shop-symfony  /bin/sh  ```
 
-Command to enter symfony container: ``` docker exec -it artic-api-shop-symfony  /bin/sh  ```
+6) Composer install: ``` composer install ```
+
+7) Set symfony:
+
+``` php bin/console doctrine:database:create ```
+
+``` php bin/console doctrine:schema:create ```
+
+``` php bin/console doctrine:fixtures:load ```
+
+``` php bin/console lexik:jwt:generate-keypair ```
+
 
 ### Switch of containers
 
