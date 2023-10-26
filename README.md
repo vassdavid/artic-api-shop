@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/vassdavid/artic-api-shop/graph/badge.svg?token=ONWV5KLS96)](https://codecov.io/gh/vassdavid/artic-api-shop)
 # artic-api-shop
 
 Artic api used simple shop
@@ -11,14 +12,9 @@ The poject is a simple webshop based on [artic api](https://api.artic.edu/docs/)
 
 ### With docker compose
 
-1) Make copy `.env.prod` or `.env.prod` to `.env` file.
-Ensure given settings is valid. See in (examlpe)[#example-docker-compose-settings].
+1) Clone repository.
 
-2) Open the `./docker-compose folder`:
-```cd docker-compose```
-
-3) Run docker compose up:
-```docker compose up -d```
+2) Run ```docker compose -f ./.docker/docker-compose.yml up```.
 
 #### Example docker-compose settings:
 
@@ -30,4 +26,6 @@ MYSQL_DATABASE=symfony_db_dev
 APP_ENV=dev
 APP_DEBUG=1
 NGINX_BACKEND_DOMAIN=artworkshop.dev
+MYSQL_USER=app_user
+MYSQL_PASSWORD=userpw
 ```

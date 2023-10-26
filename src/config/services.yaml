@@ -19,6 +19,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
+    
+    app.cache.adapter.redis:
+        parent: 'cache.adapter.redis'
+        tags:
+            - { name: 'cache.pool', namespace: 'artic-api-cache' }
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Interfaces\ArticApiServiceInterface: '@App\Service\ArticApiService'
+    App\Interfaces\ArtworkServiceInterface: '@App\Service\ArtworkService'
+    App\Interfaces\PurchasedArtworkServiceInterface: '@App\Service\PurchasedArtworkService'
+
