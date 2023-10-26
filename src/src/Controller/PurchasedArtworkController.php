@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use ApiPlatform\Symfony\Security\Exception\AccessDeniedException;
 use App\Transform\ConstraintViolationListTransform;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('api/artwork', name: 'api.artwork')]
 class PurchasedArtworkController extends AbstractController
@@ -21,11 +22,12 @@ class PurchasedArtworkController extends AbstractController
     #[Route('/buy', name:'.buy', methods: ['POST'])]
     public function buyArtworkAction(
         #[MapRequestPayload] BuyArtworkRequest $request, 
-        PurchasedArtworkServiceInterface $service
+        PurchasedArtworkServiceInterface $service,
+        Security $security
     ): JsonResponse
     {
         //for a type problem
-        $user = $this->getUser();
+        $user = $security->getUser();
         if(!$user instanceof User) { 
             //probably never catch this
             throw new AccessDeniedException();

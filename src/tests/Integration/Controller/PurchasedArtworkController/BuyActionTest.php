@@ -1,9 +1,8 @@
 <?php
-namespace App\Tests\Unit\Controller\ArtworkController\PurchasedArtworkController;
+namespace App\Tests\Integration\Controller\ArtworkController\PurchasedArtworkController;
 
 use App\Entity\User;
 use ReflectionClass;
-use PHPUnit\Framework\TestCase;
 use App\Entity\PurchasedArtwork;
 use App\Request\BuyArtworkRequest;
 use App\Exception\AlreadyBuyedException;
@@ -14,11 +13,10 @@ use App\Controller\PurchasedArtworkController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Interfaces\PurchasedArtworkServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 #[CoversClass(PurchasedArtworkController::class)]
-class BuyActionTest extends TestCase
+class BuyActionTest extends WebTestCase
 {
     private function createMockUser(): User
     {
@@ -36,20 +34,15 @@ class BuyActionTest extends TestCase
 
         return $user;
     }
-
-    private function createMockSecurity(): Security
-    {
-        $user = $this->createMockUser();
-        $security = $this->createMock(Security::class);
-        $security->method('getUser')->willReturn($user);
-
-        return $security;
-    }
-
     public function testBuyArtworkActionWithValidRequest(): void
     {
+        $client = static::createClient();
+        $user = $this->createMockUser();
+        $client->loginUser($user);
 
+        $container = static::getContainer();
         $service = $this->createMock(PurchasedArtworkServiceInterface::class);
+        $container->set(PurchasedArtworkService::class, $service);
 
         $request = new BuyArtworkRequest();
         $request->artworkId = 123;
@@ -58,53 +51,74 @@ class BuyActionTest extends TestCase
             ->method('buyArtwork')
             ->willReturn(new PurchasedArtwork());
 
-        $controller =  new PurchasedArtworkController();
-        $security = $this->createMockSecurity();
+        $client->request(
+            Request::METHOD_POST,
+            '/api/artwork/buy',
+            content: json_encode($request),
+            server: ['CONTENT_TYPE' => 'application/json']
+        );
 
-        $response = $controller->buyArtworkAction($request, $service, $security);
-
-        $this->assertEquals($response->getStatusCode(), 200);
+        $this->assertResponseIsSuccessful();
     }
 
     public function testBuyArtworkActionWithInvalidRequest(): void
     {
-
+        $client = static::createClient();
         $user = $this->createMockUser();
-    
+        $client->loginUser($user);
+
+        $container = static::getContainer();
+        
+        /** Mocking Service */
         $service = $this->createMock(PurchasedArtworkServiceInterface::class);
         $violationList = $this->createMock(ConstraintViolationListInterface::class);
         $service->expects($this->once())
             ->method('buyArtwork')
             ->willReturn($violationList);
-   
+        
+        /** Set mock service to container */
+        $container->set(PurchasedArtworkServiceInterface::class, $service);
+        
+        /** Create request for HTTP */
         $request = new BuyArtworkRequest();
         $request->artworkId = 99999;
+        
 
-        $controller = new PurchasedArtworkController();
-        $security = $this->createMockSecurity();
+        $client->request(
+            Request::METHOD_POST,
+            '/api/artwork/buy',
+            content: json_encode($request),
+            server: ['CONTENT_TYPE' => 'application/json']
+        );
 
-        $result = $controller->buyArtworkAction($request, $service, $security);
-
-        $this->assertEquals($result->getStatusCode(), 400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
     public function testBuyArtworkActionWithAlreadyPurchasedArtwork(): void
     {
+        $client = static::createClient();
+        $user = $this->createMockUser();
+        $client->loginUser($user);
+
         $service = $this->createMock(PurchasedArtworkServiceInterface::class);
         $service->expects($this->once())
             ->method('buyArtwork')
             ->willThrowException(new AlreadyBuyedException());
         
+        $container = static::getContainer();
+        $container->set(PurchasedArtworkServiceInterface::class, $service);
 
         $request = new BuyArtworkRequest();
         $request->artworkId = 123;
-        $security = $this->createMockSecurity();
 
-        $controller = new PurchasedArtworkController();
 
-        $result = $controller->buyArtworkAction($request, $service, $security);
+        $client->request(
+            Request::METHOD_POST,
+            '/api/artwork/buy',
+            content: json_encode($request),
+            server: ['CONTENT_TYPE' => 'application/json']
+        );
 
-        $this->assertEquals($result->getStatusCode(), 400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
-    
 }
