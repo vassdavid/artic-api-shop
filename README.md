@@ -35,7 +35,7 @@ The poject is a simple webshop based on [artic api](https://api.artic.edu/docs/)
 ``` php bin/console lexik:jwt:generate-keypair ```
 
 
-### Switch of containers
+### Switch off containers
 
 ``` docker compose -f ./.docker/docker-compose.yml down ```
 
